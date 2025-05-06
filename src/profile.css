@@ -21,7 +21,7 @@
     position: absolute;
     right: 0;
     top: 100%;
-    background: #ffffff;
+    background: #ccd4fc;
     border: 1px solid #ddd;
     border-radius: 4px;
     min-width: 120px;
@@ -39,5 +39,5 @@
   }
   
   .dropdown-menu button:hover {
-    background: #f0f0f0;
+    background: #aabbdf;
   }

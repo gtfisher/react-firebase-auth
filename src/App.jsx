@@ -15,10 +15,13 @@ import PublicPage from "./PublicPage";
 // import "./App.css";
 import "./simple.css";
 import "./navbar.css";
+import "./profile.css";
+
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     // Subscribe to Firebase authentication state.
@@ -29,34 +32,46 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
+  const handleProfileClick = () => {
+    setShowDropdown((prev) => !prev);
+  };
+
+  const handleLogout = () => {
+    signOut(auth);
+    setShowDropdown(false);
+  };
+
   if (loading) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return (
     <Router>
-      {/* Navbar at the top */}
+      {/* Navbar with logo, links, and the profile button */}
       <div className="navbar">
         <div className="logo">FB Auth</div>
         <nav>
           <Link to="/public">Public Page</Link>
           {user ? (
-            <>
-              <Link to="/protected">Protected Page</Link>
-              {/* Optionally, you might include a logout link here */}
-            </>
+            <Link to="/protected">Protected Page</Link>
           ) : (
             <Link to="/login">Login</Link>
           )}
         </nav>
+        {user && (
+          <div className="profile-container">
+            <button className="profile-button" onClick={handleProfileClick}>
+              {user.displayName}
+            </button>
+            {showDropdown && (
+              <div className="dropdown-menu">
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Main content container */}
       <div className="container">
-        {user && (
-          <div>
-            <h1>Welcome, {user.displayName}</h1>
-            <button onClick={() => signOut(auth)}>Logout</button>
-          </div>
-        )}
         <Routes>
           <Route path="/public" element={<PublicPage />} />
           <Route
